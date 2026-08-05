@@ -1,12 +1,11 @@
-/* Aura AI - Interactive Application Script */
+/* Aura AI - Google ADK Agents Interactive Logic */
 
 document.addEventListener('DOMContentLoaded', () => {
   initNavbarScroll();
-  initAgentStudio();
+  initADKStudio();
   initMetricsChart();
 });
 
-/* Navbar scroll blur handler */
 function initNavbarScroll() {
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
@@ -18,122 +17,161 @@ function initNavbarScroll() {
   });
 }
 
-/* Agent Studio Terminal & Sandbox logic */
-function initAgentStudio() {
+function initADKStudio() {
   const agentTabs = document.querySelectorAll('.agent-tab');
   const terminalOutput = document.getElementById('terminal-output');
   const promptInput = document.getElementById('prompt-input');
   const runBtn = document.getElementById('run-prompt-btn');
-  
-  const metricLatency = document.getElementById('metric-latency');
-  const metricSubagents = document.getElementById('metric-subagents');
-  const metricTokens = document.getElementById('metric-tokens');
+  const metricTools = document.getElementById('metric-tools');
 
-  const agentData = {
-    code: {
-      name: 'Code Architect',
-      latency: '14 ms',
-      subagents: '16 Active',
-      tokens: '3,120 t/s',
-      presetPrompt: 'Refactor REST controller to async pipeline with error boundary',
-      initialOutput: `// Agent: Code Architect (Aura v3)
-[Info] Parsing repository tree...
-[Info] Found 14 React components and 6 API handlers.
-[Success] Generated optimized asynchronous execution pipeline.
-[Output] Exporting <DashboardView /> with zero-layout-shift glassmorphism design.`
+  const adkAgents = {
+    router: {
+      name: 'router_agent',
+      toolsCount: '3 Attached Sub-Agents',
+      presetPrompt: 'I need current weather in Tokyo and I also want to lodge a complaint for supervisor support',
+      initialOutput: `// Agent: google.adk.Agent("router_agent")
+[Model] gemini-3.5-flash
+[Instruction] Analyze intent and route immediately to specialist subagent.
+[Subagents] time_weather_agent | search_agent | escalation_agent`
     },
-    data: {
-      name: 'Data Analyst',
-      latency: '22 ms',
-      subagents: '8 Active',
-      tokens: '1,890 t/s',
-      presetPrompt: 'Analyze hourly user retention and stream live SQL anomaly flags',
-      initialOutput: `// Agent: Data Analyst
-[Query] SELECT hourly_active_users, churn_risk FROM user_telemetry;
-[Analysis] 99.4% retention rate sustained over 30 days.
-[Alert] Zero data anomalies detected across current region.`
+    search: {
+      name: 'search_agent',
+      toolsCount: '1 Grounded Search Tool',
+      presetPrompt: 'Search for official Gemini 3.5 AI model release notes and benchmarks',
+      initialOutput: `// Agent: google.adk.Agent("search_agent")
+[Model] gemini-3.5-flash
+[Tools] google_search
+[Requirement] Format references with target="_blank" HTML anchor tags.`
     },
-    creative: {
-      name: 'Design System',
-      latency: '11 ms',
-      subagents: '24 Active',
-      tokens: '4,250 t/s',
-      presetPrompt: 'Generate HSL design system tokens for dark mode theme switch',
-      initialOutput: `// Agent: Design System
-[Palette] Generated 8 HSL gradient tokens.
-[CSS] Applying --gradient-primary: linear-gradient(135deg, #06b6d4, #6366f1, #8b5cf6).
-[Status] Rendered responsive viewport layout cleanly.`
+    timeweather: {
+      name: 'time_weather_agent',
+      toolsCount: '2 FunctionTools + 1 Subagent',
+      presetPrompt: 'What time is it in Tokyo right now and what is the current weather there?',
+      initialOutput: `// Agent: google.adk.Agent("time_weather_agent")
+[Tools] FunctionTool(get_current_time), FunctionTool(get_weather)
+[Subagent] location_agent`
     },
-    security: {
-      name: 'SecOps Bot',
-      latency: '9 ms',
-      subagents: '32 Active',
-      tokens: '5,100 t/s',
-      presetPrompt: 'Audit zero-trust sandbox rules and API key permission scopes',
-      initialOutput: `// Agent: SecOps Bot
-[Scan] Auditing local sandbox permissions...
-[Verified] All filesystem calls scoped to isolated sandbox directory.
-[Shield] 0 vulnerabilities found. Security posture: Enterprise Optimal.`
+    escalation: {
+      name: 'escalation_agent',
+      toolsCount: '2 FunctionTools',
+      presetPrompt: 'Escalate my issue to a live agent. Name: Alex Dev, Email: alex@example.com, Phone: +15550192, Urgency: Critical, Reason: Billing query',
+      initialOutput: `// Agent: google.adk.Agent("escalation_agent")
+[Tools] FunctionTool(escalate_to_human), FunctionTool(check_escalation_status)
+[Schema] Constructs UJET liveAgentHandoff structured JSON payload.`
+    },
+    location: {
+      name: 'location_agent',
+      toolsCount: '1 Coordinates Tool',
+      presetPrompt: 'Get exact latitude and longitude coordinates for Sydney Opera House',
+      initialOutput: `// Agent: google.adk.Agent("location_agent")
+[Tools] FunctionTool(get_coordinates)
+[Purpose] Resolves geographic coordinate bounds.`
     }
   };
 
-  // Switch tabs
+  // Switch agent tab
   agentTabs.forEach(tab => {
     tab.addEventListener('click', () => {
       agentTabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
-      
+
       const key = tab.getAttribute('data-agent');
-      const data = agentData[key];
-      
+      const data = adkAgents[key];
+
       if (data) {
         promptInput.value = data.presetPrompt;
-        metricLatency.textContent = data.latency;
-        metricSubagents.textContent = data.subagents;
-        metricTokens.textContent = data.tokens;
-        
-        terminalOutput.innerHTML = `<span style="color: #64748b;">// Switched agent to ${data.name}...</span>\n${data.initialOutput}`;
-        showToast(`Switched active agent to ${data.name}`);
+        metricTools.textContent = data.toolsCount;
+
+        terminalOutput.innerHTML = `<span style="color: #64748b;">// Active ADK Agent: ${data.name}</span>\n${data.initialOutput}`;
+        showToast(`Loaded ADK Agent: ${data.name}`);
       }
     });
   });
 
-  // Run prompt
-  function executePrompt() {
+  // Execute ADK Query
+  function executeADKQuery() {
     const userText = promptInput.value.trim();
     if (!userText) return;
 
-    terminalOutput.innerHTML += `\n\n<span style="color: #a855f7;">❯ ${escapeHTML(userText)}</span>\n<span style="color: #38bdf8;">[Aura-Core]</span> Processing instruction...`;
+    const activeTab = document.querySelector('.agent-tab.active');
+    const agentKey = activeTab ? activeTab.getAttribute('data-agent') : 'router';
+
+    terminalOutput.innerHTML += `\n\n<span style="color: #a855f7;">❯ ${escapeHTML(userText)}</span>\n<span style="color: #38bdf8;">[ADK Engine]</span> Executing tool calls on gemini-3.5-flash...`;
     terminalOutput.scrollTop = terminalOutput.scrollHeight;
 
     runBtn.disabled = true;
-    runBtn.textContent = 'Thinking...';
+    runBtn.textContent = 'Running ADK Tool...';
 
     setTimeout(() => {
-      const simulatedResponse = `\n[Success] Task executed successfully in ${Math.floor(Math.random() * 15 + 8)}ms.\n[Result] Created component module with full responsive layout and interactive hooks.`;
-      terminalOutput.innerHTML += `<span style="color: #10b981;">${simulatedResponse}</span>`;
+      let response = '';
+
+      if (agentKey === 'router') {
+        response = `\n<span style="color: #38bdf8;">[router_agent]</span> Analyzing intent...
+<span style="color: #f59e0b;">[Transfer]</span> Delegating weather query to <code>time_weather_agent</code>...
+  ↳ <span style="color: #10b981;">get_weather("Tokyo, Japan")</span> ➔ "Sunny, 22°C (72°F)"
+<span style="color: #ef4444;">[Transfer]</span> Delegating complaint to <code>escalation_agent</code>...
+  ↳ <span style="color: #a855f7;">escalate_to_human()</span> ➔ ESC-89F12A1B payload generated.`;
+      } else if (agentKey === 'search') {
+        response = `\n<span style="color: #38bdf8;">[search_agent]</span> Executing <code>google_search</code>...
+<span style="color: #10b981;">[Output]</span> Gemini 3.5 Flash offers 3x higher token throughput and zero-latency tool calling.
+<br><strong>Sources:</strong>
+• <a href="https://blog.google/technology/ai/" target="_blank" rel="noopener" style="color: #38bdf8;">Google AI Official Blog</a>
+• <a href="https://deepmind.google" target="_blank" rel="noopener" style="color: #38bdf8;">Google DeepMind Gemini Documentation</a>`;
+      } else if (agentKey === 'timeweather') {
+        response = `\n<span style="color: #38bdf8;">[time_weather_agent]</span> Executing tools...
+• <code>get_current_time(timezone="Asia/Tokyo")</code> ➔ 2026-08-06 02:34:12 (JST)
+• <code>get_weather(location="Tokyo, Japan")</code> ➔ Sunny and 22°C (72°F) with light breeze.`;
+      } else if (agentKey === 'escalation') {
+        response = `\n<span style="color: #10b981;">✅ Escalation Case Created Successfully!</span>
+• <strong>Case ID</strong>: <code>ESC-A1B2C3D4</code>
+• <strong>User</strong>: Alex Dev (alex@example.com)
+• <strong>Urgency</strong>: CRITICAL
+
+<span style="color: #64748b;">// Structured UJET Payload:</span>
+<pre style="background: #000; padding: 10px; border-radius: 6px; font-size: 0.8rem; color: #38bdf8;">{
+  "ujet": {
+    "type": "action",
+    "action": "escalation",
+    "escalation_reason": "by_virtual_agent",
+    "liveAgentHandoff": "true",
+    "session_variable": {
+      "payload": {
+        "username": "Alex Dev",
+        "email_id": "alex@example.com",
+        "urgency": "critical",
+        "user_reason": "Billing query"
+      }
+    }
+  }
+}</pre>`;
+      } else {
+        response = `\n<span style="color: #38bdf8;">[location_agent]</span> Executing <code>get_coordinates("Sydney Opera House")</code>...
+• <strong>Latitude</strong>: -33.8568° S
+• <strong>Longitude</strong>: 151.2153° E
+• <strong>Address</strong>: Bennelong Point, Sydney NSW 2000, Australia`;
+      }
+
+      terminalOutput.innerHTML += response;
       terminalOutput.scrollTop = terminalOutput.scrollHeight;
-      
+
       runBtn.disabled = false;
-      runBtn.textContent = 'Execute';
-      showToast('Task executed by Aura AI');
-    }, 800);
+      runBtn.textContent = 'Run ADK Query';
+      showToast('ADK Tool Execution Complete');
+    }, 900);
   }
 
-  runBtn.addEventListener('click', executePrompt);
+  runBtn.addEventListener('click', executeADKQuery);
   promptInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') executePrompt();
+    if (e.key === 'Enter') executeADKQuery();
   });
 }
 
-/* HTML Escaper */
 function escapeHTML(str) {
   return str.replace(/[&<>'"]/g, 
     tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
   );
 }
 
-/* Toast Notifications */
 function showToast(message) {
   const container = document.getElementById('toast-container');
   if (!container) return;
@@ -152,13 +190,11 @@ function showToast(message) {
   }, 3000);
 }
 
-/* Canvas Performance Chart */
 function initMetricsChart() {
   const canvas = document.getElementById('metricsChart');
   if (!canvas) return;
 
   const ctx = canvas.getContext('2d');
-  let animationFrame;
 
   function resizeCanvas() {
     canvas.width = canvas.parentElement.clientWidth;
@@ -178,7 +214,6 @@ function initMetricsChart() {
     const h = canvas.height;
     const step = w / (pointsCount - 1);
 
-    // Draw Grid Lines
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
     ctx.lineWidth = 1;
 
@@ -189,7 +224,6 @@ function initMetricsChart() {
       ctx.stroke();
     }
 
-    // Draw Smooth Line
     ctx.beginPath();
     ctx.moveTo(0, h - (dataPoints[0] / 100) * h);
 
@@ -203,29 +237,27 @@ function initMetricsChart() {
       ctx.quadraticCurveTo(prevX, prevY, cpX, (prevY + y) / 2);
     }
 
-    ctx.strokeStyle = '#06b6d4';
+    ctx.strokeStyle = '#a855f7';
     ctx.lineWidth = 3;
-    ctx.shadowColor = 'rgba(6, 182, 212, 0.5)';
+    ctx.shadowColor = 'rgba(168, 85, 247, 0.5)';
     ctx.shadowBlur = 12;
     ctx.stroke();
 
-    // Fill Gradient Area
     ctx.lineTo(w, h);
     ctx.lineTo(0, h);
     ctx.closePath();
 
     const gradient = ctx.createLinearGradient(0, 0, 0, h);
-    gradient.addColorStop(0, 'rgba(6, 182, 212, 0.25)');
-    gradient.addColorStop(1, 'rgba(6, 182, 212, 0.0)');
+    gradient.addColorStop(0, 'rgba(168, 85, 247, 0.25)');
+    gradient.addColorStop(1, 'rgba(168, 85, 247, 0.0)');
     ctx.fillStyle = gradient;
     ctx.fill();
 
-    // Shift data
     dataPoints.shift();
     dataPoints.push(Math.min(95, Math.max(15, dataPoints[dataPoints.length - 1] + (Math.random() - 0.48) * 12)));
 
     setTimeout(() => {
-      animationFrame = requestAnimationFrame(drawChart);
+      requestAnimationFrame(drawChart);
     }, 100);
   }
 

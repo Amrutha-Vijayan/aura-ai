@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aura AI — Next-Gen Autonomous Intelligence Platform</title>
-  <meta name="description" content="Aura AI is the enterprise-grade autonomous agent orchestrator for seamless code generation, real-time data synthesis, and workflow automation.">
+  <title>Aura AI — Google ADK Multi-Agent Platform</title>
+  <meta name="description" content="Aura AI is an enterprise multi-agent platform powered by Google ADK (Agent Development Kit) featuring Router Agent, Search Agent, Time & Weather Agent, and Live Escalation Agent.">
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 </head>
 <body>
 
@@ -21,20 +21,21 @@
   <nav class="navbar" id="navbar">
     <div class="container nav-container">
       <a href="#" class="logo">
-        <div class="logo-icon">✨</div>
-        <span>Aura<span class="gradient-text">.AI</span></span>
+        <div class="logo-icon">⚡</div>
+        <span>Aura<span class="gradient-text">.ADK</span></span>
       </a>
 
       <ul class="nav-links">
-        <li><a href="#playground" class="nav-link">Agent Studio</a></li>
+        <li><a href="#playground" class="nav-link">ADK Agent Studio</a></li>
+        <li><a href="#topology" class="nav-link">Agent Topology</a></li>
         <li><a href="#features" class="nav-link">Capabilities</a></li>
         <li><a href="#analytics" class="nav-link">Metrics</a></li>
         <li><a href="#pricing" class="nav-link">Plans</a></li>
       </ul>
 
       <div class="nav-actions">
-        <a href="#playground" class="btn btn-outline">Demo Console</a>
-        <a href="https://github.com/Amrutha-Vijayan" target="_blank" rel="noopener" class="btn btn-primary">GitHub Profile ⚡</a>
+        <a href="#playground" class="btn btn-outline">Live ADK Sandbox</a>
+        <a href="https://github.com/Dig-Voice-AI" target="_blank" rel="noopener" class="btn btn-primary">Dig-Voice-AI GitHub 🚀</a>
       </div>
     </div>
   </nav>
@@ -44,23 +45,23 @@
     <div class="container">
       <div class="badge">
         <span class="badge-dot"></span>
-        Aura AI v3.0 Engine Live & Hosted
+        Google ADK Multi-Agent Framework • Gemini 3.5 Flash
       </div>
 
       <h1 class="hero-title">
-        Orchestrate Multi-Agent Workflows with <span class="gradient-text">Aura AI</span>
+        Google ADK Orchestrated <span class="gradient-text">Multi-Agent Engine</span>
       </h1>
 
       <p class="hero-subtitle">
-        Deploy sovereign, self-healing AI agents that write production code, analyze live telemetry, and execute complex workflows in parallel.
+        Deploy intelligent Google ADK sub-agents for automated query routing, real-time Google Search grounding, system time & weather, and structured live agent escalation.
       </p>
 
       <div class="hero-ctas">
-        <a href="#playground" class="btn btn-primary">Launch Interactive Studio</a>
-        <a href="#features" class="btn btn-outline">Explore Capabilities</a>
+        <a href="#playground" class="btn btn-primary">Launch ADK Sandbox</a>
+        <a href="#topology" class="btn btn-outline">View Agent Architecture</a>
       </div>
 
-      <!-- Live Interactive Playground -->
+      <!-- Live Interactive Playground featuring ADK Agents -->
       <div class="playground-card" id="playground">
         <div class="playground-header">
           <div class="terminal-dots">
@@ -69,40 +70,83 @@
             <div class="dot dot-green"></div>
           </div>
           <div class="agent-selector">
-            <button class="agent-tab active" data-agent="code">Code Architect</button>
-            <button class="agent-tab" data-agent="data">Data Analyst</button>
-            <button class="agent-tab" data-agent="creative">Design System</button>
-            <button class="agent-tab" data-agent="security">SecOps Bot</button>
+            <button class="agent-tab active" data-agent="router">Router Agent</button>
+            <button class="agent-tab" data-agent="search">Search Agent</button>
+            <button class="agent-tab" data-agent="timeweather">Time & Weather Agent</button>
+            <button class="agent-tab" data-agent="escalation">Escalation Agent</button>
+            <button class="agent-tab" data-agent="location">Location Agent</button>
           </div>
         </div>
 
         <div class="playground-body">
           <div class="terminal-window">
             <div class="terminal-output" id="terminal-output">
-              <span style="color: #64748b;">// Initializing Aura AI Engine...</span>
-              <br><span style="color: #38bdf8;">[Aura-Core]</span> Ready. Select an agent or type a prompt below...
+              <span style="color: #64748b;">// Initializing Google ADK Agent Cluster...</span>
+              <br><span style="color: #38bdf8;">[ADK-Root]</span> <strong style="color: #a855f7;">router_agent</strong> active (Model: gemini-3.5-flash).
+              <br><span style="color: #64748b;">Subagents attached: time_weather_agent, search_agent, escalation_agent, location_agent.</span>
+              <br>Select an ADK agent above or run a test query below...
             </div>
             <div class="prompt-input-wrapper">
               <span style="color: #a855f7;">❯</span>
-              <input type="text" id="prompt-input" class="prompt-input" placeholder="Ask Aura AI to build a component or run analysis..." value="Generate a modern glassmorphism dashboard layout">
-              <button id="run-prompt-btn" class="run-btn">Execute</button>
+              <input type="text" id="prompt-input" class="prompt-input" placeholder="Enter query for ADK router agent..." value="Can you search for the latest Gemini AI updates and tell me the current weather in Tokyo?">
+              <button id="run-prompt-btn" class="run-btn">Run ADK Query</button>
             </div>
           </div>
 
           <div class="metrics-sidebar">
             <div class="metric-box">
-              <div class="metric-label">Engine Latency</div>
-              <div class="metric-value" id="metric-latency">18 ms</div>
+              <div class="metric-label">ADK Framework</div>
+              <div class="metric-value" style="font-size: 1.1rem; color: #38bdf8;">google.adk v0.8.2</div>
             </div>
             <div class="metric-box">
-              <div class="metric-label">Active Subagents</div>
-              <div class="metric-value" id="metric-subagents">12 Idle</div>
+              <div class="metric-label">Model Architecture</div>
+              <div class="metric-value" style="font-size: 1.1rem; color: #a855f7;">Gemini 3.5 Flash</div>
             </div>
             <div class="metric-box">
-              <div class="metric-label">Token Throughput</div>
-              <div class="metric-value" id="metric-tokens">2,480 t/s</div>
+              <div class="metric-label">Active Tools</div>
+              <div class="metric-value" id="metric-tools" style="font-size: 1.1rem; color: #10b981;">5 ADK Function Tools</div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Agent Topology Section -->
+  <section class="section" id="topology">
+    <div class="container">
+      <h2 class="section-title">ADK <span class="gradient-text">Agent Topology</span></h2>
+      <p class="section-subtitle">Hierarchical multi-agent delegation schema powered by Google ADK framework.</p>
+
+      <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+        <div class="feature-card" style="border-color: rgba(168, 85, 247, 0.4);">
+          <div class="feature-icon" style="color: #a855f7; background: rgba(168, 85, 247, 0.1);">🔀</div>
+          <h3 class="feature-title">router_agent</h3>
+          <p class="feature-desc"><strong>Top-level Coordinator</strong>. Analyzes intent and transfers execution to specialist sub-agents instantly.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon" style="color: #38bdf8; background: rgba(56, 189, 248, 0.1);">🔎</div>
+          <h3 class="feature-title">search_agent</h3>
+          <p class="feature-desc">Executes <code>google_search</code> grounded retrieval with explicit target="_blank" source links.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);">🌦️</div>
+          <h3 class="feature-title">time_weather_agent</h3>
+          <p class="feature-desc">Provides IANA system clock lookup (<code>get_current_time</code>) and location weather report (<code>get_weather</code>).</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon" style="color: #ef4444; background: rgba(239, 68, 68, 0.1);">🆘</div>
+          <h3 class="feature-title">escalation_agent</h3>
+          <p class="feature-desc">Captures contact details and submits structured <code>ujet</code> live agent handoff payload.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">📍</div>
+          <h3 class="feature-title">location_agent</h3>
+          <p class="feature-desc">Resolves geographic coordinates, latitude, and longitude for location context requests.</p>
         </div>
       </div>
     </div>
@@ -111,55 +155,37 @@
   <!-- Capabilities Section -->
   <section class="section" id="features">
     <div class="container">
-      <h2 class="section-title">Engineered for <span class="gradient-text">Autonomous Scale</span></h2>
-      <p class="section-subtitle">Unmatched concurrency, resilient context tracking, and sub-second reasoning across your full stack.</p>
+      <h2 class="section-title">Google ADK <span class="gradient-text">Features</span></h2>
+      <p class="section-subtitle">Built on Google Agent Development Kit for enterprise resiliency, context isolation, and tool calling.</p>
 
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon">🧠</div>
-          <h3 class="feature-title">Self-Healing Code Execution</h3>
-          <p class="feature-desc">Aura AI inspects build logs, fixes runtime exceptions, and re-verifies test suites in isolated sandboxes.</p>
+          <div class="feature-icon">🧩</div>
+          <h3 class="feature-title">FunctionTool Decorators</h3>
+          <p class="feature-desc">Decorate standard Python functions into Google ADK schema tools with automatic type enforcement.</p>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">⚡</div>
-          <h3 class="feature-title">Sub-Agent Delegation</h3>
-          <p class="feature-desc">Spawn dedicated research and execution subagents concurrently without polluting main context.</p>
+          <div class="feature-icon">🔄</div>
+          <h3 class="feature-title">Sub-Agent Transfer Control</h3>
+          <p class="feature-desc">Decoupled sub-agent execution allows seamless transfer of context between specialized domain agents.</p>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">🛡️</div>
-          <h3 class="feature-title">Zero-Trust Sandbox</h3>
-          <p class="feature-desc">Granular permissions and isolated filesystem environments guarantee state protection at every layer.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">🌐</div>
-          <h3 class="feature-title">Live Web & API Telemetry</h3>
-          <p class="feature-desc">Seamlessly crawl documentation, query REST endpoints, and synthesize live dataset feeds in real time.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">📊</div>
-          <h3 class="feature-title">Adaptive Memory & Context</h3>
-          <p class="feature-desc">Hierarchical vector indexing retains long-term architectural decisions across session lifecycles.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">🚀</div>
-          <h3 class="feature-title">Instant GitHub Pages Sync</h3>
-          <p class="feature-desc">Deploy built static assets directly to GitHub Pages with automated CI/CD pipeline triggers.</p>
+          <div class="feature-icon">📋</div>
+          <h3 class="feature-title">Structured UJET Handoff</h3>
+          <p class="feature-desc">Automated escalation handler constructs verified JSON payloads for customer support CRM integration.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Metrics & Live Analytics Section -->
+  <!-- Metrics Section -->
   <section class="section" id="analytics">
     <div class="container">
       <div class="analytics-box">
-        <h2 class="section-title">Live System Performance</h2>
-        <p class="section-subtitle">Real-time throughput and response time metrics across active global edge nodes.</p>
+        <h2 class="section-title">ADK Agent Execution Telemetry</h2>
+        <p class="section-subtitle">Real-time throughput and response time metrics across active subagent loops.</p>
         <div class="canvas-container">
           <canvas id="metricsChart"></canvas>
         </div>
@@ -170,58 +196,41 @@
   <!-- Pricing Plans Section -->
   <section class="section" id="pricing">
     <div class="container">
-      <h2 class="section-title">Flexible <span class="gradient-text">Tier Pricing</span></h2>
-      <p class="section-subtitle">Start building immediately with our developer plan or scale with dedicated agent clusters.</p>
+      <h2 class="section-title">Flexible <span class="gradient-text">ADK Deployment Tiers</span></h2>
 
       <div class="pricing-grid">
         <div class="pricing-card">
           <div>
-            <h3>Starter Dev</h3>
-            <p style="color: var(--text-muted); margin-top: 6px;">For individual developers and experimenters.</p>
+            <h3>Open Source ADK</h3>
+            <p style="color: var(--text-muted); margin-top: 6px;">Self-hosted Google ADK codebase.</p>
             <div class="pricing-price">$0 <span style="font-size: 1rem; color: var(--text-dim);">/ mo</span></div>
             <ul class="pricing-features">
-              <li class="pricing-feature-item">✓ Up to 5 Active Subagents</li>
-              <li class="pricing-feature-item">✓ 100k Tokens / day</li>
-              <li class="pricing-feature-item">✓ Community GitHub Support</li>
+              <li class="pricing-feature-item">✓ Unlimited Local Subagents</li>
+              <li class="pricing-feature-item">✓ Python google-adk Framework</li>
+              <li class="pricing-feature-item">✓ Community GitHub Repo</li>
             </ul>
           </div>
-          <a href="#" class="btn btn-outline" style="width: 100%;">Get Started Free</a>
+          <a href="https://github.com/Dig-Voice-AI" target="_blank" class="btn btn-outline" style="width: 100%;">Fork on GitHub</a>
         </div>
 
         <div class="pricing-card featured">
           <div>
-            <div style="background: var(--gradient-primary); padding: 4px 12px; border-radius: 99px; font-size: 0.75rem; font-weight: 700; width: fit-content; margin-bottom: 12px; color: #fff;">RECOMMENDED</div>
-            <h3>Pro Agent Studio</h3>
-            <p style="color: var(--text-muted); margin-top: 6px;">For high-velocity engineering teams.</p>
+            <div style="background: var(--gradient-primary); padding: 4px 12px; border-radius: 99px; font-size: 0.75rem; font-weight: 700; width: fit-content; margin-bottom: 12px; color: #fff;">ENTERPRISE</div>
+            <h3>Cloud Run Managed Engine</h3>
+            <p style="color: var(--text-muted); margin-top: 6px;">Fully hosted ADK cluster on Google Cloud Run.</p>
             <div class="pricing-price">$49 <span style="font-size: 1rem; color: var(--text-dim);">/ mo</span></div>
             <ul class="pricing-features">
-              <li class="pricing-feature-item">✓ Unlimited Subagent Concurrent Loops</li>
-              <li class="pricing-feature-item">✓ 10M Tokens / month</li>
-              <li class="pricing-feature-item">✓ Custom Tool Integration & MCP</li>
-              <li class="pricing-feature-item">✓ 24/7 Priority Agent SLA</li>
+              <li class="pricing-feature-item">✓ Auto-scaling Cloud Run Containers</li>
+              <li class="pricing-feature-item">✓ Built-in UJET Live Escalation Handoff</li>
+              <li class="pricing-feature-item">✓ Gemini 3.5 Flash Model Access</li>
             </ul>
           </div>
-          <a href="#" class="btn btn-primary" style="width: 100%;">Upgrade to Pro</a>
-        </div>
-
-        <div class="pricing-card">
-          <div>
-            <h3>Enterprise Engine</h3>
-            <p style="color: var(--text-muted); margin-top: 6px;">Dedicated cloud clusters and custom guardrails.</p>
-            <div class="pricing-price">Custom</div>
-            <ul class="pricing-features">
-              <li class="pricing-feature-item">✓ Dedicated On-Prem Cloud Sandbox</li>
-              <li class="pricing-feature-item">✓ Custom LLM Weights & Fine-tuning</li>
-              <li class="pricing-feature-item">✓ SOC2 & ISO Compliance Safeguards</li>
-            </ul>
-          </div>
-          <a href="#" class="btn btn-outline" style="width: 100%;">Contact Sales</a>
+          <a href="#playground" class="btn btn-primary" style="width: 100%;">Deploy ADK Agent</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Toast Notification Container -->
   <div class="toast-container" id="toast-container"></div>
 
   <!-- Footer -->
@@ -229,17 +238,17 @@
     <div class="container">
       <div class="footer-container">
         <div class="logo">
-          <div class="logo-icon">✨</div>
-          <span>Aura<span class="gradient-text">.AI</span></span>
+          <div class="logo-icon">⚡</div>
+          <span>Aura<span class="gradient-text">.ADK</span></span>
         </div>
 
         <p style="color: var(--text-muted); font-size: 0.9rem;">
-          Created for <a href="https://github.com/Amrutha-Vijayan" target="_blank" style="color: var(--accent-cyan); text-decoration: none;">Amrutha-Vijayan</a>
+          Hosted for <a href="https://github.com/Dig-Voice-AI" target="_blank" style="color: var(--accent-cyan); text-decoration: none;">Dig-Voice-AI</a> & <a href="https://github.com/Amrutha-Vijayan" target="_blank" style="color: var(--accent-indigo); text-decoration: none;">Amrutha-Vijayan</a>
         </p>
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; 2026 Aura AI Engine. Built with HTML, CSS & Vanilla JS. Published via GitHub Pages.</p>
+        <p>&copy; 2026 Aura AI • Powered by Google Agent Development Kit (ADK) & Gemini 3.5 Flash.</p>
       </div>
     </div>
   </footer>
