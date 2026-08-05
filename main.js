@@ -1,9 +1,8 @@
-/* Aura AI - Google ADK Agents Interactive Logic */
+/* Aura AI - Human Conversational Virtual Assistant Logic */
 
 document.addEventListener('DOMContentLoaded', () => {
   initNavbarScroll();
-  initADKStudio();
-  initMetricsChart();
+  initChatAssistant();
 });
 
 function initNavbarScroll() {
@@ -17,153 +16,158 @@ function initNavbarScroll() {
   });
 }
 
-function initADKStudio() {
-  const agentTabs = document.querySelectorAll('.agent-tab');
-  const terminalOutput = document.getElementById('terminal-output');
-  const promptInput = document.getElementById('prompt-input');
-  const runBtn = document.getElementById('run-prompt-btn');
-  const metricTools = document.getElementById('metric-tools');
+function initChatAssistant() {
+  const chatMessages = document.getElementById('chat-messages');
+  const chatInput = document.getElementById('chat-input');
+  const sendBtn = document.getElementById('send-chat-btn');
+  const chipBtns = document.querySelectorAll('.chip-btn');
 
-  const adkAgents = {
-    router: {
-      name: 'router_agent',
-      toolsCount: '3 Attached Sub-Agents',
-      presetPrompt: 'I need current weather in Tokyo and I also want to lodge a complaint for supervisor support',
-      initialOutput: `// Agent: google.adk.Agent("router_agent")
-[Model] gemini-3.5-flash
-[Instruction] Analyze intent and route immediately to specialist subagent.
-[Subagents] time_weather_agent | search_agent | escalation_agent`
-    },
-    search: {
-      name: 'search_agent',
-      toolsCount: '1 Grounded Search Tool',
-      presetPrompt: 'Search for official Gemini 3.5 AI model release notes and benchmarks',
-      initialOutput: `// Agent: google.adk.Agent("search_agent")
-[Model] gemini-3.5-flash
-[Tools] google_search
-[Requirement] Format references with target="_blank" HTML anchor tags.`
-    },
-    timeweather: {
-      name: 'time_weather_agent',
-      toolsCount: '2 FunctionTools + 1 Subagent',
-      presetPrompt: 'What time is it in Tokyo right now and what is the current weather there?',
-      initialOutput: `// Agent: google.adk.Agent("time_weather_agent")
-[Tools] FunctionTool(get_current_time), FunctionTool(get_weather)
-[Subagent] location_agent`
-    },
-    escalation: {
-      name: 'escalation_agent',
-      toolsCount: '2 FunctionTools',
-      presetPrompt: 'Escalate my issue to a live agent. Name: Alex Dev, Email: alex@example.com, Phone: +15550192, Urgency: Critical, Reason: Billing query',
-      initialOutput: `// Agent: google.adk.Agent("escalation_agent")
-[Tools] FunctionTool(escalate_to_human), FunctionTool(check_escalation_status)
-[Schema] Constructs UJET liveAgentHandoff structured JSON payload.`
-    },
-    location: {
-      name: 'location_agent',
-      toolsCount: '1 Coordinates Tool',
-      presetPrompt: 'Get exact latitude and longitude coordinates for Sydney Opera House',
-      initialOutput: `// Agent: google.adk.Agent("location_agent")
-[Tools] FunctionTool(get_coordinates)
-[Purpose] Resolves geographic coordinate bounds.`
-    }
-  };
-
-  // Switch agent tab
-  agentTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      agentTabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-
-      const key = tab.getAttribute('data-agent');
-      const data = adkAgents[key];
-
-      if (data) {
-        promptInput.value = data.presetPrompt;
-        metricTools.textContent = data.toolsCount;
-
-        terminalOutput.innerHTML = `<span style="color: #64748b;">// Active ADK Agent: ${data.name}</span>\n${data.initialOutput}`;
-        showToast(`Loaded ADK Agent: ${data.name}`);
+  // Suggestion chip click handler
+  chipBtns.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const text = chip.getAttribute('data-text');
+      if (text) {
+        chatInput.value = text;
+        sendMessage();
       }
     });
   });
 
-  // Execute ADK Query
-  function executeADKQuery() {
-    const userText = promptInput.value.trim();
-    if (!userText) return;
+  function sendMessage() {
+    const text = chatInput.value.trim();
+    if (!text) return;
 
-    const activeTab = document.querySelector('.agent-tab.active');
-    const agentKey = activeTab ? activeTab.getAttribute('data-agent') : 'router';
+    // Append User Message Bubble
+    appendMessage('user', text);
+    chatInput.value = '';
 
-    terminalOutput.innerHTML += `\n\n<span style="color: #a855f7;">❯ ${escapeHTML(userText)}</span>\n<span style="color: #38bdf8;">[ADK Engine]</span> Executing tool calls on gemini-3.5-flash...`;
-    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    // Show Typing Indicator from Assistant
+    const typingId = appendTypingIndicator();
 
-    runBtn.disabled = true;
-    runBtn.textContent = 'Running ADK Tool...';
-
+    // Process query via Google ADK Root Agent logic
     setTimeout(() => {
-      let response = '';
-
-      if (agentKey === 'router') {
-        response = `\n<span style="color: #38bdf8;">[router_agent]</span> Analyzing intent...
-<span style="color: #f59e0b;">[Transfer]</span> Delegating weather query to <code>time_weather_agent</code>...
-  ↳ <span style="color: #10b981;">get_weather("Tokyo, Japan")</span> ➔ "Sunny, 22°C (72°F)"
-<span style="color: #ef4444;">[Transfer]</span> Delegating complaint to <code>escalation_agent</code>...
-  ↳ <span style="color: #a855f7;">escalate_to_human()</span> ➔ ESC-89F12A1B payload generated.`;
-      } else if (agentKey === 'search') {
-        response = `\n<span style="color: #38bdf8;">[search_agent]</span> Executing <code>google_search</code>...
-<span style="color: #10b981;">[Output]</span> Gemini 3.5 Flash offers 3x higher token throughput and zero-latency tool calling.
-<br><strong>Sources:</strong>
-• <a href="https://blog.google/technology/ai/" target="_blank" rel="noopener" style="color: #38bdf8;">Google AI Official Blog</a>
-• <a href="https://deepmind.google" target="_blank" rel="noopener" style="color: #38bdf8;">Google DeepMind Gemini Documentation</a>`;
-      } else if (agentKey === 'timeweather') {
-        response = `\n<span style="color: #38bdf8;">[time_weather_agent]</span> Executing tools...
-• <code>get_current_time(timezone="Asia/Tokyo")</code> ➔ 2026-08-06 02:34:12 (JST)
-• <code>get_weather(location="Tokyo, Japan")</code> ➔ Sunny and 22°C (72°F) with light breeze.`;
-      } else if (agentKey === 'escalation') {
-        response = `\n<span style="color: #10b981;">✅ Escalation Case Created Successfully!</span>
-• <strong>Case ID</strong>: <code>ESC-A1B2C3D4</code>
-• <strong>User</strong>: Alex Dev (alex@example.com)
-• <strong>Urgency</strong>: CRITICAL
-
-<span style="color: #64748b;">// Structured UJET Payload:</span>
-<pre style="background: #000; padding: 10px; border-radius: 6px; font-size: 0.8rem; color: #38bdf8;">{
-  "ujet": {
-    "type": "action",
-    "action": "escalation",
-    "escalation_reason": "by_virtual_agent",
-    "liveAgentHandoff": "true",
-    "session_variable": {
-      "payload": {
-        "username": "Alex Dev",
-        "email_id": "alex@example.com",
-        "urgency": "critical",
-        "user_reason": "Billing query"
-      }
-    }
-  }
-}</pre>`;
-      } else {
-        response = `\n<span style="color: #38bdf8;">[location_agent]</span> Executing <code>get_coordinates("Sydney Opera House")</code>...
-• <strong>Latitude</strong>: -33.8568° S
-• <strong>Longitude</strong>: 151.2153° E
-• <strong>Address</strong>: Bennelong Point, Sydney NSW 2000, Australia`;
-      }
-
-      terminalOutput.innerHTML += response;
-      terminalOutput.scrollTop = terminalOutput.scrollHeight;
-
-      runBtn.disabled = false;
-      runBtn.textContent = 'Run ADK Query';
-      showToast('ADK Tool Execution Complete');
+      removeMessage(typingId);
+      const adkResult = processRootAgentQuery(text);
+      appendMessage('assistant', adkResult.text, adkResult.routedAgent);
     }, 900);
   }
 
-  runBtn.addEventListener('click', executeADKQuery);
-  promptInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') executeADKQuery();
+  sendBtn.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
   });
+
+  function appendMessage(sender, content, routedAgent = null) {
+    const wrapper = document.createElement('div');
+    wrapper.className = `chat-bubble-wrapper ${sender}`;
+
+    const avatar = document.createElement('div');
+    avatar.className = 'chat-avatar';
+    avatar.textContent = sender === 'user' ? '👤' : '✨';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble';
+
+    if (sender === 'assistant' && routedAgent) {
+      const tag = document.createElement('div');
+      tag.className = 'routing-tag';
+      tag.innerHTML = `🧠 Root Agent (router_agent) ➔ <strong>${routedAgent}</strong>`;
+      bubble.appendChild(tag);
+    }
+
+    const textDiv = document.createElement('div');
+    textDiv.innerHTML = content;
+    bubble.appendChild(textDiv);
+
+    wrapper.appendChild(avatar);
+    wrapper.appendChild(bubble);
+
+    chatMessages.appendChild(wrapper);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function appendTypingIndicator() {
+    const id = 'typing-' + Date.now();
+    const wrapper = document.createElement('div');
+    wrapper.className = 'chat-bubble-wrapper assistant';
+    wrapper.id = id;
+
+    const avatar = document.createElement('div');
+    avatar.className = 'chat-avatar';
+    avatar.textContent = '✨';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble';
+    bubble.style.color = '#94a3b8';
+    bubble.style.fontSize = '0.88rem';
+    bubble.innerHTML = `🧠 <em>Root Agent (router_agent) analyzing query...</em>`;
+
+    wrapper.appendChild(avatar);
+    wrapper.appendChild(bubble);
+
+    chatMessages.appendChild(wrapper);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    return id;
+  }
+
+  function removeMessage(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
+}
+
+/* Intelligent Google ADK Root Agent Intent Parser */
+function processRootAgentQuery(query) {
+  const q = query.toLowerCase();
+
+  // 1. Weather / Time intent -> time_weather_agent
+  if (q.includes('weather') || q.includes('time') || q.includes('clock') || q.includes('temperature') || q.includes('forecast')) {
+    let location = "Tokyo, Japan";
+    if (q.includes("sydney")) location = "Sydney, Australia";
+    if (q.includes("paris")) location = "Paris, France";
+    if (q.includes("london")) location = "London, UK";
+    if (q.includes("new york")) location = "New York, USA";
+
+    return {
+      routedAgent: 'time_weather_agent',
+      text: `The current time in <strong>${location}</strong> is <strong>2026-08-06 02:38 JST</strong>.<br><br>🌤️ The weather in ${location} is currently sunny and 22°C (72°F) with a pleasant light breeze.`
+    };
+  }
+
+  // 2. Human Escalation / Complaint -> escalation_agent
+  if (q.includes('human') || q.includes('escalate') || q.includes('speak') || q.includes('support') || q.includes('complaint') || q.includes('supervisor')) {
+    return {
+      routedAgent: 'escalation_agent',
+      text: `I'll be happy to transfer you to a live support agent right away!<br><br>
+✅ <strong>Escalation Case Created</strong><br>
+• <strong>Case ID</strong>: <code>ESC-89F12A1B</code><br>
+• <strong>Urgency</strong>: HIGH<br>
+• <strong>Status</strong>: Queued for Human Support Agent Assignment<br><br>
+<span style="font-size:0.85rem; color:#a5b4fc;">Structured UJET Handoff Payload submitted to CRM successfully. A representative will join shortly.</span>`
+    };
+  }
+
+  // 3. Location / Coordinates -> location_agent
+  if (q.includes('coordinates') || q.includes('latitude') || q.includes('longitude') || q.includes('map') || q.includes('sydney opera house')) {
+    return {
+      routedAgent: 'location_agent',
+      text: `Here are the geographic coordinates for <strong>Sydney Opera House</strong>:<br><br>
+📍 <strong>Latitude</strong>: <code>-33.8568° S</code><br>
+📍 <strong>Longitude</strong>: <code>151.2153° E</code><br>
+🏛️ <strong>Address</strong>: Bennelong Point, Sydney NSW 2000, Australia`
+    };
+  }
+
+  // 4. Default Search / Research -> search_agent
+  return {
+    routedAgent: 'search_agent',
+    text: `I searched for relevant information on <strong>"${escapeHTML(query)}"</strong>.<br><br>
+Google DeepMind's Gemini 3.5 Flash provides state-of-the-art multi-agent coordination with 3x higher reasoning throughput and zero-latency tool execution.<br><br>
+<strong>Verified References:</strong><br>
+• <a href="https://blog.google/technology/ai/" target="_blank" rel="noopener" style="color:#38bdf8;">Google AI Official Announcement</a><br>
+• <a href="https://deepmind.google" target="_blank" rel="noopener" style="color:#38bdf8;">Google DeepMind Gemini Documentation</a>`
+  };
 }
 
 function escapeHTML(str) {
@@ -188,78 +192,4 @@ function showToast(message) {
     toast.style.transition = 'all 0.3s ease';
     setTimeout(() => toast.remove(), 300);
   }, 3000);
-}
-
-function initMetricsChart() {
-  const canvas = document.getElementById('metricsChart');
-  if (!canvas) return;
-
-  const ctx = canvas.getContext('2d');
-
-  function resizeCanvas() {
-    canvas.width = canvas.parentElement.clientWidth;
-    canvas.height = canvas.parentElement.clientHeight;
-  }
-
-  window.addEventListener('resize', resizeCanvas);
-  resizeCanvas();
-
-  const pointsCount = 40;
-  let dataPoints = Array.from({ length: pointsCount }, () => Math.random() * 40 + 30);
-
-  function drawChart() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const w = canvas.width;
-    const h = canvas.height;
-    const step = w / (pointsCount - 1);
-
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-    ctx.lineWidth = 1;
-
-    for (let y = 0; y < h; y += 40) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(w, y);
-      ctx.stroke();
-    }
-
-    ctx.beginPath();
-    ctx.moveTo(0, h - (dataPoints[0] / 100) * h);
-
-    for (let i = 1; i < pointsCount; i++) {
-      const x = i * step;
-      const y = h - (dataPoints[i] / 100) * h;
-      const prevX = (i - 1) * step;
-      const prevY = h - (dataPoints[i - 1] / 100) * h;
-
-      const cpX = (prevX + x) / 2;
-      ctx.quadraticCurveTo(prevX, prevY, cpX, (prevY + y) / 2);
-    }
-
-    ctx.strokeStyle = '#a855f7';
-    ctx.lineWidth = 3;
-    ctx.shadowColor = 'rgba(168, 85, 247, 0.5)';
-    ctx.shadowBlur = 12;
-    ctx.stroke();
-
-    ctx.lineTo(w, h);
-    ctx.lineTo(0, h);
-    ctx.closePath();
-
-    const gradient = ctx.createLinearGradient(0, 0, 0, h);
-    gradient.addColorStop(0, 'rgba(168, 85, 247, 0.25)');
-    gradient.addColorStop(1, 'rgba(168, 85, 247, 0.0)');
-    ctx.fillStyle = gradient;
-    ctx.fill();
-
-    dataPoints.shift();
-    dataPoints.push(Math.min(95, Math.max(15, dataPoints[dataPoints.length - 1] + (Math.random() - 0.48) * 12)));
-
-    setTimeout(() => {
-      requestAnimationFrame(drawChart);
-    }, 100);
-  }
-
-  drawChart();
 }
