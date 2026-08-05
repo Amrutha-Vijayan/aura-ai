@@ -1,4 +1,4 @@
-/* Aura AI - Simple Friendly Conversational Logic */
+/* Aura-AI - Conversational Agent Logic */
 
 document.addEventListener('DOMContentLoaded', () => {
   initNavbarScroll();
@@ -93,7 +93,7 @@ function initChatAssistant() {
     bubble.className = 'chat-bubble';
     bubble.style.color = '#94a3b8';
     bubble.style.fontSize = '0.92rem';
-    bubble.innerHTML = `✨ <em>Aura is thinking...</em>`;
+    bubble.innerHTML = `✨ <em>Aura-AI is thinking...</em>`;
 
     wrapper.appendChild(avatar);
     wrapper.appendChild(bubble);
@@ -122,7 +122,7 @@ function processUserQuery(query) {
     if (q.includes("london")) location = "London, UK";
     if (q.includes("new york")) location = "New York, USA";
 
-    return `The current time in <strong>${location}</strong> is <strong>2026-08-06 02:48 JST</strong>.<br><br>🌤️ Weather in ${location}: Currently sunny and 22°C (72°F) with a light breeze.`;
+    return `The current time in <strong>${location}</strong> is <strong>2026-08-06 02:53 JST</strong>.<br><br>🌤️ Weather in ${location}: Currently sunny and 22°C (72°F) with a light breeze.`;
   }
 
   // 2. Support / Escalation
@@ -144,10 +144,10 @@ A team member will join this conversation shortly to assist you.`;
 
   // 4. General Search & Info
   return `Here is what I found for <strong>"${escapeHTML(query)}"</strong>:<br><br>
-Aura is designed to provide 24/7 instant assistance, smart information retrieval, and seamless customer support.<br><br>
+Aura-AI is designed to provide 24/7 instant assistance, smart information retrieval, and seamless customer support.<br><br>
 <strong>Helpful Resources:</strong><br>
 • <a href="https://blog.google/technology/ai/" target="_blank" rel="noopener" style="color:#38bdf8;">Latest Artificial Intelligence Updates</a><br>
-• <a href="https://deepmind.google" target="_blank" rel="noopener" style="color:#38bdf8;">Learn More About Aura Features</a>`;
+• <a href="https://deepmind.google" target="_blank" rel="noopener" style="color:#38bdf8;">Learn More About Aura-AI Features</a>`;
 }
 
 function escapeHTML(str) {
