@@ -1,4 +1,4 @@
-/* Aura AI - Simple Conversational Virtual Assistant Logic */
+/* Aura AI - Simple Friendly Conversational Logic */
 
 document.addEventListener('DOMContentLoaded', () => {
   initNavbarScroll();
@@ -22,7 +22,7 @@ function initChatAssistant() {
   const sendBtn = document.getElementById('send-chat-btn');
   const chipBtns = document.querySelectorAll('.chip-btn');
 
-  // Suggestion chip click handler
+  // Suggestion chip handler
   chipBtns.forEach(chip => {
     chip.addEventListener('click', () => {
       const text = chip.getAttribute('data-text');
@@ -37,19 +37,19 @@ function initChatAssistant() {
     const text = chatInput.value.trim();
     if (!text) return;
 
-    // Append User Message Bubble
+    // Append User Message
     appendMessage('user', text);
     chatInput.value = '';
 
-    // Show Typing Indicator from Assistant
+    // Show Typing Indicator
     const typingId = appendTypingIndicator();
 
-    // Process query via Google ADK Root Agent logic
+    // Process Query
     setTimeout(() => {
       removeMessage(typingId);
-      const adkResult = processRootAgentQuery(text);
-      appendMessage('assistant', adkResult.text, adkResult.routedAgent);
-    }, 850);
+      const responseText = processUserQuery(text);
+      appendMessage('assistant', responseText);
+    }, 750);
   }
 
   sendBtn.addEventListener('click', sendMessage);
@@ -57,7 +57,7 @@ function initChatAssistant() {
     if (e.key === 'Enter') sendMessage();
   });
 
-  function appendMessage(sender, content, routedAgent = null) {
+  function appendMessage(sender, content) {
     const wrapper = document.createElement('div');
     wrapper.className = `chat-bubble-wrapper ${sender}`;
 
@@ -67,13 +67,6 @@ function initChatAssistant() {
 
     const bubble = document.createElement('div');
     bubble.className = 'chat-bubble';
-
-    if (sender === 'assistant' && routedAgent) {
-      const tag = document.createElement('div');
-      tag.className = 'routing-tag';
-      tag.innerHTML = `🧠 Root Agent (router_agent) ➔ <strong>${routedAgent}</strong>`;
-      bubble.appendChild(tag);
-    }
 
     const textDiv = document.createElement('div');
     textDiv.innerHTML = content;
@@ -99,8 +92,8 @@ function initChatAssistant() {
     const bubble = document.createElement('div');
     bubble.className = 'chat-bubble';
     bubble.style.color = '#94a3b8';
-    bubble.style.fontSize = '0.9rem';
-    bubble.innerHTML = `🧠 <em>Root Agent (router_agent) analyzing query...</em>`;
+    bubble.style.fontSize = '0.92rem';
+    bubble.innerHTML = `✨ <em>Aura is thinking...</em>`;
 
     wrapper.appendChild(avatar);
     wrapper.appendChild(bubble);
@@ -117,11 +110,11 @@ function initChatAssistant() {
   }
 }
 
-/* Google ADK Root Agent Intent Router */
-function processRootAgentQuery(query) {
+/* User Friendly Query Processor */
+function processUserQuery(query) {
   const q = query.toLowerCase();
 
-  // 1. Weather / Time -> time_weather_agent
+  // 1. Weather / Time
   if (q.includes('weather') || q.includes('time') || q.includes('clock') || q.includes('temperature') || q.includes('forecast')) {
     let location = "Tokyo, Japan";
     if (q.includes("sydney")) location = "Sydney, Australia";
@@ -129,45 +122,32 @@ function processRootAgentQuery(query) {
     if (q.includes("london")) location = "London, UK";
     if (q.includes("new york")) location = "New York, USA";
 
-    return {
-      routedAgent: 'time_weather_agent',
-      text: `The current system time in <strong>${location}</strong> is <strong>2026-08-06 02:44 JST</strong>.<br><br>🌤️ Weather in ${location}: Sunny and 22°C (72°F) with light breeze.`
-    };
+    return `The current time in <strong>${location}</strong> is <strong>2026-08-06 02:48 JST</strong>.<br><br>🌤️ Weather in ${location}: Currently sunny and 22°C (72°F) with a light breeze.`;
   }
 
-  // 2. Human Escalation -> escalation_agent
-  if (q.includes('human') || q.includes('escalate') || q.includes('speak') || q.includes('support') || q.includes('complaint') || q.includes('supervisor')) {
-    return {
-      routedAgent: 'escalation_agent',
-      text: `Connecting you to a live support agent right now...<br><br>
-✅ <strong>Escalation Case Created</strong><br>
-• <strong>Case ID</strong>: <code>ESC-89F12A1B</code><br>
-• <strong>Urgency</strong>: HIGH<br>
-• <strong>Status</strong>: Queued for Human Support Agent Assignment<br><br>
-<span style="font-size:0.85rem; color:#a5b4fc;">Structured UJET Handoff Payload generated. A human representative will assist you shortly.</span>`
-    };
+  // 2. Support / Escalation
+  if (q.includes('human') || q.includes('escalate') || q.includes('speak') || q.includes('support') || q.includes('complaint') || q.includes('connect')) {
+    return `Connecting you with a live customer support representative right away!<br><br>
+🤝 <strong>Support Ticket Created</strong><br>
+• <strong>Ticket ID</strong>: <code>#AURA-89F12</code><br>
+• <strong>Status</strong>: Representative Being Assigned<br><br>
+A team member will join this conversation shortly to assist you.`;
   }
 
-  // 3. Location / Coordinates -> location_agent
+  // 3. Location / Coordinates
   if (q.includes('coordinates') || q.includes('latitude') || q.includes('longitude') || q.includes('map') || q.includes('sydney opera house')) {
-    return {
-      routedAgent: 'location_agent',
-      text: `Geographic coordinates for <strong>Sydney Opera House</strong>:<br><br>
+    return `Geographic location for <strong>Sydney Opera House</strong>:<br><br>
 📍 <strong>Latitude</strong>: <code>-33.8568° S</code><br>
 📍 <strong>Longitude</strong>: <code>151.2153° E</code><br>
-🏛️ <strong>Address</strong>: Bennelong Point, Sydney NSW 2000, Australia`
-    };
+🏛️ <strong>Address</strong>: Bennelong Point, Sydney NSW 2000, Australia`;
   }
 
-  // 4. Search / Research -> search_agent
-  return {
-    routedAgent: 'search_agent',
-    text: `Here is what I found for <strong>"${escapeHTML(query)}"</strong>:<br><br>
-Google DeepMind's Gemini 3.5 Flash provides state-of-the-art multi-agent routing with high-speed reasoning.<br><br>
-<strong>Verified Sources:</strong><br>
-• <a href="https://blog.google/technology/ai/" target="_blank" rel="noopener" style="color:#38bdf8;">Google AI Official Announcement</a><br>
-• <a href="https://deepmind.google" target="_blank" rel="noopener" style="color:#38bdf8;">Google DeepMind Gemini Documentation</a>`
-  };
+  // 4. General Search & Info
+  return `Here is what I found for <strong>"${escapeHTML(query)}"</strong>:<br><br>
+Aura is designed to provide 24/7 instant assistance, smart information retrieval, and seamless customer support.<br><br>
+<strong>Helpful Resources:</strong><br>
+• <a href="https://blog.google/technology/ai/" target="_blank" rel="noopener" style="color:#38bdf8;">Latest Artificial Intelligence Updates</a><br>
+• <a href="https://deepmind.google" target="_blank" rel="noopener" style="color:#38bdf8;">Learn More About Aura Features</a>`;
 }
 
 function escapeHTML(str) {
