@@ -1,4 +1,4 @@
-/* Aura-AI - Strict Localhost ADK Agent Client */
+/* Aura-AI - Cloud Run ADK Agent Client */
 
 document.addEventListener('DOMContentLoaded', () => {
   initNavbarScroll();
@@ -22,8 +22,8 @@ function initChatAssistant() {
   const sendBtn = document.getElementById('send-chat-btn');
   const chipBtns = document.querySelectorAll('.chip-btn');
 
-  // Strict Localhost 8080 Endpoint
-  const LOCALHOST_ENDPOINT = 'http://127.0.0.1:8080/run';
+  // Live Google Cloud Run HTTPS Endpoint
+  const CLOUD_RUN_ENDPOINT = 'https://demo-agent-317584469189.us-central1.run.app/run';
 
   // Suggestion chip handler
   chipBtns.forEach(chip => {
@@ -47,13 +47,13 @@ function initChatAssistant() {
     // Show Typing Indicator
     const typingId = appendTypingIndicator();
 
-    // Send Request strictly to Localhost 8080
-    fetch(LOCALHOST_ENDPOINT, {
+    // Send Request directly to Cloud Run Service
+    fetch(CLOUD_RUN_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         app_name: 'router_agent',
-        user_id: 'local_user_' + Date.now(),
+        user_id: 'aura_user_' + Date.now(),
         message: text
       })
     })
@@ -65,9 +65,8 @@ function initChatAssistant() {
     })
     .catch(err => {
       removeMessage(typingId);
-      console.warn('Localhost 8080 connection error:', err);
-      // Offline message when localhost 8080 cannot be reached
-      appendMessage('assistant', '⚠️ Localhost ADK agent server is offline.');
+      console.warn('Cloud Run ADK agent connection error:', err);
+      appendMessage('assistant', '⚠️ Cloud Run ADK agent server is temporarily unreachable.');
     });
   }
 
