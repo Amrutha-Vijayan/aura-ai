@@ -1,4 +1,4 @@
-/* Aura AI - Human Conversational Virtual Assistant Logic */
+/* Aura AI - Simple Conversational Virtual Assistant Logic */
 
 document.addEventListener('DOMContentLoaded', () => {
   initNavbarScroll();
@@ -49,7 +49,7 @@ function initChatAssistant() {
       removeMessage(typingId);
       const adkResult = processRootAgentQuery(text);
       appendMessage('assistant', adkResult.text, adkResult.routedAgent);
-    }, 900);
+    }, 850);
   }
 
   sendBtn.addEventListener('click', sendMessage);
@@ -99,7 +99,7 @@ function initChatAssistant() {
     const bubble = document.createElement('div');
     bubble.className = 'chat-bubble';
     bubble.style.color = '#94a3b8';
-    bubble.style.fontSize = '0.88rem';
+    bubble.style.fontSize = '0.9rem';
     bubble.innerHTML = `🧠 <em>Root Agent (router_agent) analyzing query...</em>`;
 
     wrapper.appendChild(avatar);
@@ -117,11 +117,11 @@ function initChatAssistant() {
   }
 }
 
-/* Intelligent Google ADK Root Agent Intent Parser */
+/* Google ADK Root Agent Intent Router */
 function processRootAgentQuery(query) {
   const q = query.toLowerCase();
 
-  // 1. Weather / Time intent -> time_weather_agent
+  // 1. Weather / Time -> time_weather_agent
   if (q.includes('weather') || q.includes('time') || q.includes('clock') || q.includes('temperature') || q.includes('forecast')) {
     let location = "Tokyo, Japan";
     if (q.includes("sydney")) location = "Sydney, Australia";
@@ -131,20 +131,20 @@ function processRootAgentQuery(query) {
 
     return {
       routedAgent: 'time_weather_agent',
-      text: `The current time in <strong>${location}</strong> is <strong>2026-08-06 02:38 JST</strong>.<br><br>🌤️ The weather in ${location} is currently sunny and 22°C (72°F) with a pleasant light breeze.`
+      text: `The current system time in <strong>${location}</strong> is <strong>2026-08-06 02:44 JST</strong>.<br><br>🌤️ Weather in ${location}: Sunny and 22°C (72°F) with light breeze.`
     };
   }
 
-  // 2. Human Escalation / Complaint -> escalation_agent
+  // 2. Human Escalation -> escalation_agent
   if (q.includes('human') || q.includes('escalate') || q.includes('speak') || q.includes('support') || q.includes('complaint') || q.includes('supervisor')) {
     return {
       routedAgent: 'escalation_agent',
-      text: `I'll be happy to transfer you to a live support agent right away!<br><br>
+      text: `Connecting you to a live support agent right now...<br><br>
 ✅ <strong>Escalation Case Created</strong><br>
 • <strong>Case ID</strong>: <code>ESC-89F12A1B</code><br>
 • <strong>Urgency</strong>: HIGH<br>
 • <strong>Status</strong>: Queued for Human Support Agent Assignment<br><br>
-<span style="font-size:0.85rem; color:#a5b4fc;">Structured UJET Handoff Payload submitted to CRM successfully. A representative will join shortly.</span>`
+<span style="font-size:0.85rem; color:#a5b4fc;">Structured UJET Handoff Payload generated. A human representative will assist you shortly.</span>`
     };
   }
 
@@ -152,19 +152,19 @@ function processRootAgentQuery(query) {
   if (q.includes('coordinates') || q.includes('latitude') || q.includes('longitude') || q.includes('map') || q.includes('sydney opera house')) {
     return {
       routedAgent: 'location_agent',
-      text: `Here are the geographic coordinates for <strong>Sydney Opera House</strong>:<br><br>
+      text: `Geographic coordinates for <strong>Sydney Opera House</strong>:<br><br>
 📍 <strong>Latitude</strong>: <code>-33.8568° S</code><br>
 📍 <strong>Longitude</strong>: <code>151.2153° E</code><br>
 🏛️ <strong>Address</strong>: Bennelong Point, Sydney NSW 2000, Australia`
     };
   }
 
-  // 4. Default Search / Research -> search_agent
+  // 4. Search / Research -> search_agent
   return {
     routedAgent: 'search_agent',
-    text: `I searched for relevant information on <strong>"${escapeHTML(query)}"</strong>.<br><br>
-Google DeepMind's Gemini 3.5 Flash provides state-of-the-art multi-agent coordination with 3x higher reasoning throughput and zero-latency tool execution.<br><br>
-<strong>Verified References:</strong><br>
+    text: `Here is what I found for <strong>"${escapeHTML(query)}"</strong>:<br><br>
+Google DeepMind's Gemini 3.5 Flash provides state-of-the-art multi-agent routing with high-speed reasoning.<br><br>
+<strong>Verified Sources:</strong><br>
 • <a href="https://blog.google/technology/ai/" target="_blank" rel="noopener" style="color:#38bdf8;">Google AI Official Announcement</a><br>
 • <a href="https://deepmind.google" target="_blank" rel="noopener" style="color:#38bdf8;">Google DeepMind Gemini Documentation</a>`
   };

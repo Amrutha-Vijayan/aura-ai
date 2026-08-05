@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aura — Conversational Virtual Assistant</title>
-  <meta name="description" content="Aura is a single conversational virtual assistant powered by Google ADK Root Agent routing.">
+  <title>Aura — Virtual Assistant</title>
+  <meta name="description" content="Aura is a simple, intelligent virtual assistant powered by Google ADK Root Agent routing.">
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
 </head>
@@ -27,73 +27,54 @@
 
       <ul class="nav-links">
         <li><a href="#chat-assistant" class="nav-link">Virtual Assistant</a></li>
-        <li><a href="#how-it-works" class="nav-link">Root Agent Flow</a></li>
         <li><a href="#features" class="nav-link">Features</a></li>
       </ul>
 
       <div class="nav-actions">
-        <a href="#chat-assistant" class="btn btn-outline">Talk to Aura</a>
         <a href="https://github.com/Dig-Voice-AI" target="_blank" rel="noopener" class="btn btn-primary">Dig-Voice-AI GitHub 🚀</a>
       </div>
     </div>
   </nav>
 
-  <!-- Hero Section -->
+  <!-- Hero & Chat Assistant Section -->
   <section class="hero">
     <div class="container">
       <div class="badge">
         <span class="badge-dot"></span>
-        Single Conversational Assistant • Google ADK Root Agent
+        Google ADK Root Agent Engine • Gemini 3.5 Flash
       </div>
 
       <h1 class="hero-title">
-        Meet <span class="gradient-text">Aura</span>, Your AI Virtual Assistant
+        Meet <span class="gradient-text">Aura</span> Virtual Assistant
       </h1>
 
-      <p class="hero-subtitle">
-        Talk to Aura naturally. Every conversation routes through the Google ADK <strong>Root Agent</strong> (<code>router_agent</code>) to fulfill weather, search, and human escalation requests seamlessly.
-      </p>
-
-      <div class="hero-ctas">
-        <a href="#chat-assistant" class="btn btn-primary">Start Conversation</a>
-        <a href="#how-it-works" class="btn btn-outline">How Root Routing Works</a>
-      </div>
-
-      <!-- Human Conversational Chat Assistant Card -->
+      <!-- Clean Conversational Chat Assistant Card -->
       <div class="playground-card" id="chat-assistant">
-        <div class="playground-header" style="justify-content: space-between;">
+        <div class="playground-header">
           <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 36px; height: 36px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; box-shadow: 0 0 12px rgba(99,102,241,0.5);">✨</div>
+            <div style="width: 40px; height: 40px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; box-shadow: 0 0 14px rgba(99,102,241,0.5);">✨</div>
             <div>
-              <div style="font-weight: 700; color: #fff; font-size: 1rem;">Aura Virtual Assistant</div>
-              <div style="font-size: 0.8rem; color: #10b981; display: flex; align-items: center; gap: 6px;">
-                <span style="width: 6px; height: 6px; background: #10b981; border-radius: 50%;"></span>
+              <div style="font-weight: 700; color: #fff; font-size: 1.05rem;">Aura Virtual Assistant</div>
+              <div style="font-size: 0.82rem; color: #10b981; display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+                <span style="width: 7px; height: 7px; background: #10b981; border-radius: 50%;"></span>
                 Connected to Root Agent (<code>router_agent</code>)
               </div>
             </div>
           </div>
 
-          <div style="display: flex; gap: 8px;">
-            <span style="background: rgba(255,255,255,0.06); padding: 4px 12px; border-radius: 99px; font-size: 0.78rem; color: #a5b4fc; border: 1px solid var(--glass-border);">Model: gemini-3.5-flash</span>
-          </div>
+          <span class="model-badge">Model: gemini-3.5-flash</span>
         </div>
 
         <!-- Chat Container -->
         <div class="chat-container">
           <div class="chat-messages" id="chat-messages">
             
-            <!-- Welcome Assistant Message -->
+            <!-- Simple Clean Welcome Assistant Message -->
             <div class="chat-bubble-wrapper assistant">
               <div class="chat-avatar">✨</div>
               <div class="chat-bubble">
-                Hello! I am <strong>Aura</strong>, your intelligent virtual assistant.<br>
-                How can I help you today? You can ask me about:
-                <ul style="margin: 8px 0 0 18px; line-height: 1.6; font-size: 0.9rem;">
-                  <li>🌤️ System time and local weather report</li>
-                  <li>🔎 Factual questions or web search</li>
-                  <li>🆘 Escalating an issue to human support</li>
-                  <li>📍 Location coordinates and geographic lookup</li>
-                </ul>
+                Hello! I am <strong>Aura</strong>, your virtual assistant.<br>
+                How can I help you today?
               </div>
             </div>
 
@@ -107,12 +88,12 @@
             <button class="chip-btn" data-text="Get coordinates for Sydney Opera House">📍 Sydney Coordinates</button>
           </div>
 
-          <!-- Chat Input Area -->
+          <!-- Prominent Large Chat Input Area -->
           <div class="chat-input-wrapper">
-            <input type="text" id="chat-input" class="chat-input" placeholder="Type your message to Aura..." autocomplete="off">
-            <button id="send-chat-btn" class="send-btn">
+            <input type="text" id="chat-input" class="chat-input-large" placeholder="Type your message to Aura..." autocomplete="off">
+            <button id="send-chat-btn" class="send-btn-large">
               <span>Send</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
             </button>
           </div>
         </div>
@@ -121,63 +102,29 @@
     </div>
   </section>
 
-  <!-- How It Works / Root Agent Flow Section -->
-  <section class="section" id="how-it-works">
-    <div class="container">
-      <h2 class="section-title">Behind the Scenes: <span class="gradient-text">Root Agent Flow</span></h2>
-      <p class="section-subtitle">You talk to Aura as a single assistant. The Google ADK Root Agent routes your query automatically.</p>
-
-      <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
-        <div class="feature-card" style="border-color: rgba(99, 102, 241, 0.4);">
-          <div class="feature-icon" style="color: #6366f1; background: rgba(99, 102, 241, 0.1);">💬</div>
-          <h3 class="feature-title">1. User Message</h3>
-          <p class="feature-desc">You type a message to Aura in natural human language.</p>
-        </div>
-
-        <div class="feature-card" style="border-color: rgba(168, 85, 247, 0.4);">
-          <div class="feature-icon" style="color: #a855f7; background: rgba(168, 85, 247, 0.1);">🧠</div>
-          <h3 class="feature-title">2. Root Agent (router_agent)</h3>
-          <p class="feature-desc">The Google ADK <code>router_agent</code> analyzes intent without exposing complexity.</p>
-        </div>
-
-        <div class="feature-card" style="border-color: rgba(6, 182, 212, 0.4);">
-          <div class="feature-icon" style="color: #06b6d4; background: rgba(6, 182, 212, 0.1);">⚙️</div>
-          <h3 class="feature-title">3. Specialist Tool / Subagent</h3>
-          <p class="feature-desc">Transfers to <code>search_agent</code>, <code>time_weather_agent</code>, or <code>escalation_agent</code> behind the scenes.</p>
-        </div>
-
-        <div class="feature-card" style="border-color: rgba(16, 185, 129, 0.4);">
-          <div class="feature-icon" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">✨</div>
-          <h3 class="feature-title">4. Human Response</h3>
-          <p class="feature-desc">Aura returns a clear, helpful, formatted response back to you in the chat.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Features Section -->
   <section class="section" id="features">
     <div class="container">
-      <h2 class="section-title">Built with <span class="gradient-text">Google ADK Framework</span></h2>
-      <p class="section-subtitle">Powered by Gemini 3.5 Flash for fast reasoning, tool execution, and seamless human escalation.</p>
+      <h2 class="section-title">Powered by <span class="gradient-text">Google ADK Engine</span></h2>
+      <p class="section-subtitle">Single assistant entry point backed by sub-agent routing and real-time tool execution.</p>
 
       <div class="features-grid">
         <div class="feature-card">
           <div class="feature-icon">🛡️</div>
           <h3 class="feature-title">Human Live Escalation</h3>
-          <p class="feature-desc">When requested, Aura collects user contact details and generates structured UJET payloads for live support agents.</p>
+          <p class="feature-desc">Collects contact details and generates structured UJET payloads for live support agent handoff.</p>
         </div>
 
         <div class="feature-card">
           <div class="feature-icon">🔎</div>
-          <h3 class="feature-title">Grounded Search Answers</h3>
-          <p class="feature-desc">Provides accurate web search references formatted cleanly with clickable external links.</p>
+          <h3 class="feature-title">Grounded Search</h3>
+          <p class="feature-desc">Provides accurate web search results with clean, clickable external links opening in new tabs.</p>
         </div>
 
         <div class="feature-card">
           <div class="feature-icon">⚡</div>
-          <h3 class="feature-title">Real-Time System Tools</h3>
-          <p class="feature-desc">Provides exact system time across IANA timezones and current weather conditions on demand.</p>
+          <h3 class="feature-title">System Time & Weather</h3>
+          <p class="feature-desc">Provides exact system clock time across IANA timezones and current weather reports on demand.</p>
         </div>
       </div>
     </div>
@@ -200,7 +147,7 @@
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; 2026 Aura Virtual Assistant • Google ADK Root Agent Architecture.</p>
+        <p>&copy; 2026 Aura Virtual Assistant • Powered by Google Agent Development Kit (ADK).</p>
       </div>
     </div>
   </footer>
