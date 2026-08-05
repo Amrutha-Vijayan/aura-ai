@@ -59,8 +59,8 @@ function initChatAssistant() {
     .catch(err => {
       removeMessage(typingId);
       console.warn('Localhost ADK agent connection error:', err);
-      // Display clear offline status message
-      appendMessage('assistant', `⚠️ <strong>Localhost ADK agent server is offline.</strong><br>Please start your local server with <code>adk web --port 8080</code>.`);
+      // Chat agent response when offline
+      appendMessage('assistant', `⚠️ Localhost ADK agent server is offline.`);
     });
   }
 
