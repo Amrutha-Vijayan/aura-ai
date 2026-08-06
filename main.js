@@ -30,7 +30,7 @@ function initChatAssistant() {
   const queryApi = urlParams.get('api');
   const storedApi = localStorage.getItem('aura_adk_api_url');
   
-  let DEFAULT_BACKEND = queryApi || storedApi || 'http://127.0.0.1:8080';
+  let DEFAULT_BACKEND = queryApi || storedApi || 'https://90d286f5e48780ff-117-254-12-59.serveousercontent.com';
   
   // Clean trailing slash
   DEFAULT_BACKEND = DEFAULT_BACKEND.replace(/\/+$/, '');
