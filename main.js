@@ -25,22 +25,20 @@ function initChatAssistant() {
   const serverInput = document.getElementById('server-endpoint-input');
   const statusText = document.getElementById('agent-status-text');
 
-  // Detect backend URL: URL Query Param 'api' > LocalStorage > Default Localhost
+  // Live Tunnel / Local Backend URL Configuration
+  const LIVE_TUNNEL_URL = 'https://90d286f5e48780ff-117-254-12-59.serveousercontent.com';
+
   const urlParams = new URLSearchParams(window.location.search);
   const queryApi = urlParams.get('api');
-  const storedApi = localStorage.getItem('aura_adk_api_url');
   
-  let DEFAULT_BACKEND = queryApi || storedApi || 'https://90d286f5e48780ff-117-254-12-59.serveousercontent.com';
-  
-  // Clean trailing slash
-  DEFAULT_BACKEND = DEFAULT_BACKEND.replace(/\/+$/, '');
+  // Use query parameter if provided, otherwise default directly to the live tunnel URL
+  let DEFAULT_BACKEND = (queryApi || LIVE_TUNNEL_URL).replace(/\/+$/, '');
 
   if (serverInput) {
     serverInput.value = DEFAULT_BACKEND;
     serverInput.addEventListener('change', () => {
       let val = serverInput.value.trim().replace(/\/+$/, '');
       if (val) {
-        localStorage.setItem('aura_adk_api_url', val);
         DEFAULT_BACKEND = val;
         activeSessionId = null; // Reset session for new backend
         if (statusText) statusText.textContent = 'Connected: ' + val;
