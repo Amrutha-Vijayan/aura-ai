@@ -94,7 +94,7 @@ function initChatAssistant() {
       if (statusText) statusText.textContent = 'Aura-AI Active';
 
       // 2. Call ADK /run endpoint
-      const runRes = await fetch(`${currentBackend}/run`, {
+      let runRes = await fetch(`${currentBackend}/run`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -108,8 +108,36 @@ function initChatAssistant() {
         })
       });
 
+      // If session invalid or expired, recreate session and retry once
+      if (runRes.status === 422 || runRes.status === 404) {
+        const retrySessRes = await fetch(`${currentBackend}/apps/router_agent/users/${userId}/sessions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+        if (retrySessRes.ok) {
+          const retrySessData = await retrySessRes.json();
+          activeSessionId = retrySessData.id;
+
+          runRes = await fetch(`${currentBackend}/run`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              appName: 'router_agent',
+              userId: userId,
+              sessionId: activeSessionId,
+              newMessage: {
+                role: 'user',
+                parts: [{ text: text }]
+              }
+            })
+          });
+        }
+      }
+
       if (!runRes.ok) {
-        throw new Error(`Run request failed (HTTP ${runRes.status})`);
+        const errText = await runRes.text();
+        throw new Error(`Run request failed (HTTP ${runRes.status}): ${errText}`);
       }
 
       const runData = await runRes.json();
@@ -120,8 +148,9 @@ function initChatAssistant() {
     } catch (err) {
       removeMessage(typingId);
       console.warn('ADK Agent server connection error:', err);
+      activeSessionId = null; // Reset session so next attempt rebuilds session
       if (statusText) statusText.textContent = 'Server Unreachable';
-      appendMessage('assistant', `⚠️ Could not reach local ADK server at <code>${currentBackend}</code>.<br><br><strong>Troubleshooting:</strong><br>1. Ensure your local server is running (e.g. <code>adk api_server</code> on port 8080).<br>2. If accessing via GitHub Pages, ensure your tunnel (Ngrok / Cloudflare) is active and CORS is allowed.`);
+      appendMessage('assistant', `⚠️ Could not communicate with ADK server.<br><br><strong>Note:</strong> Make sure your browser has reloaded the latest scripts by doing a Hard Refresh (Ctrl + Shift + R or Cmd + Shift + R).`);
     }
   }
 
