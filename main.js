@@ -25,14 +25,14 @@ function initChatAssistant() {
   const serverInput = document.getElementById('server-endpoint-input');
   const statusText = document.getElementById('agent-status-text');
 
-  // Live Tunnel / Local Backend URL Configuration
-  const LIVE_TUNNEL_URL = 'https://90d286f5e48780ff-117-254-12-59.serveousercontent.com';
+  // Live Cloud Run / Serveo Backend URL Configuration
+  const DEFAULT_SERVER_URL = "https://demo-agent-317584469189.us-central1.run.app";
 
   const urlParams = new URLSearchParams(window.location.search);
   const queryApi = urlParams.get('api');
   
   // Use query parameter if provided, otherwise default directly to the live tunnel URL
-  let DEFAULT_BACKEND = (queryApi || LIVE_TUNNEL_URL).replace(/\/+$/, '');
+  let DEFAULT_BACKEND = (queryApi || DEFAULT_SERVER_URL).replace(/\/+$/, '');
 
   if (serverInput) {
     serverInput.value = DEFAULT_BACKEND;

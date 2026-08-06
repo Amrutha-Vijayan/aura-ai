@@ -224,8 +224,8 @@
       try {
         const userId = 'tester_user_1';
         
-        // 1. Create Session if not created
-        if (!activeSessionId) {
+        // Helper to create session
+        async function createNewSession() {
           outputEl.textContent = `⏳ Creating ADK Session on ${baseUrl}...`;
           const sessRes = await fetch(`${baseUrl}/apps/router_agent/users/${userId}/sessions`, {
             method: 'POST',
@@ -233,15 +233,21 @@
             body: JSON.stringify({})
           });
           const sessData = await sessRes.json();
-          activeSessionId = sessData.id;
-          if (currentTarget === 'local') localSessionId = activeSessionId;
-          else cloudSessionId = activeSessionId;
+          const newId = sessData.id;
+          if (currentTarget === 'local') localSessionId = newId;
+          else cloudSessionId = newId;
+          return newId;
+        }
+
+        // 1. Create Session if not created
+        if (!activeSessionId) {
+          activeSessionId = await createNewSession();
         }
 
         outputEl.textContent = `⏳ Session Active (${activeSessionId}). Invoking router_agent...`;
 
         // 2. Invoke /run
-        const runRes = await fetch(`${baseUrl}/run`, {
+        let runRes = await fetch(`${baseUrl}/run`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -255,12 +261,35 @@
           })
         });
 
-        const runData = await runRes.json();
+        let runData = await runRes.json();
+
+        // 3. Handle expired or missing session
+        if (runData && runData.detail && typeof runData.detail === 'string' && runData.detail.includes('Session not found')) {
+          outputEl.textContent = `🔄 Session expired. Creating new session...`;
+          activeSessionId = await createNewSession();
+          outputEl.textContent = `⏳ New Session Active (${activeSessionId}). Retrying invocation...`;
+          
+          runRes = await fetch(`${baseUrl}/run`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              appName: 'router_agent',
+              userId: userId,
+              sessionId: activeSessionId,
+              newMessage: {
+                role: 'user',
+                parts: [{ text: msg }]
+              }
+            })
+          });
+          runData = await runRes.json();
+        }
+
         outputEl.textContent = JSON.stringify(runData, null, 2);
 
       } catch (err) {
         outputEl.textContent = `❌ Error connecting to ${currentTarget.toUpperCase()}:\n` + err.toString() + 
-          `\n\nTips:\n- For Localhost, ensure "adk web --port 8080" is running.\n- For Cloud Run, test in Google Cloud Shell or Cloud Console.`;
+          `\n\nTips:\n- For Localhost, ensure "python server.py" is running.\n- For Cloud Run, ensure Cloud Run instance is reachable.`;
       }
     }
 
