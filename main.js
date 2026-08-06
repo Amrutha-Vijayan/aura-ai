@@ -41,7 +41,7 @@ function initChatAssistant() {
       if (val) {
         DEFAULT_BACKEND = val;
         activeSessionId = null; // Reset session for new backend
-        if (statusText) statusText.textContent = 'Connected: ' + val;
+        if (statusText) statusText.textContent = 'Online';
       }
     });
   }
@@ -76,7 +76,7 @@ function initChatAssistant() {
     try {
       // 1. Create ADK Session if not active
       if (!activeSessionId) {
-        if (statusText) statusText.textContent = 'Connecting to server...';
+        if (statusText) statusText.textContent = 'Connecting...';
         const sessRes = await fetch(`${currentBackend}/apps/router_agent/users/${userId}/sessions`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -91,7 +91,7 @@ function initChatAssistant() {
         activeSessionId = sessData.id;
       }
 
-      if (statusText) statusText.textContent = 'Aura-AI Active';
+      if (statusText) statusText.textContent = 'Online';
 
       // 2. Call ADK /run endpoint
       let runRes = await fetch(`${currentBackend}/run`, {
